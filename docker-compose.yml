@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   database_server:
-    image: mcr.microsoft.com/mssql/server
+    image: mcr.microsoft.com/azure-sql-edge
     env_file:
       - variables.env
     ports:
