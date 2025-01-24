@@ -7,7 +7,6 @@ $conn = maakVerbinding();
 $error = '';
 
 function isUsernameTaken($conn, $username) {
-    // Check if username already exists
     $checkQuery = "SELECT username FROM [User] WHERE username = ?";
     $stmt = $conn->prepare($checkQuery);
     $stmt->execute([$username]);
