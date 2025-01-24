@@ -1,62 +1,4 @@
-<?php
-session_start();
-require_once('../applicatie/db_connectie.php');
-require_once('../applicatie/functions/security.php');
-startSecureSession();
-checkSessionTimeout();
-checkIfPersonnel();
-checkUserLoggedIn();
-
-if (!isset($_GET['order_id'])) {
-    header('Location: dashboard.php');
-    exit();
-}
-
-
-function fetchOrderDetails($conn, $orderId, $username) {
-    $query = "SELECT po.order_id, po.client_name, po.datetime, po.status, po.address, po.personnel_username, 
-              STRING_AGG(CONCAT(pop.quantity, 'x ', pop.product_name), ', ') as order_items,
-              SUM(pop.quantity * p.price) as total_amount
-              FROM Pizza_Order po
-              LEFT JOIN Pizza_Order_Product pop ON po.order_id = pop.order_id
-              LEFT JOIN Product p ON pop.product_name = p.name
-              WHERE po.order_id = :order_id AND po.personnel_username = :personnel_username
-              GROUP BY po.order_id, po.client_name, po.datetime, po.status, po.address, po.personnel_username";
-    
-    $stmt = $conn->prepare($query);
-    $stmt->execute([
-        'order_id' => $orderId,
-        'personnel_username' => $username
-    ]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-
-function fetchOrderItems($conn, $orderId) {
-    $itemsQuery = "SELECT pop.*, p.price, (p.price * pop.quantity) as subtotal
-                   FROM Pizza_Order_Product pop
-                   JOIN Product p ON pop.product_name = p.name
-                   WHERE pop.order_id = :order_id";
-    
-    $itemsStmt = $conn->prepare($itemsQuery);
-    $itemsStmt->execute(['order_id' => $orderId]);
-    return $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-try {
-    $conn = maakVerbinding();
-    $order = fetchOrderDetails($conn, $_GET['order_id'], $_SESSION['username']);
-
-    if (!$order) {
-        header('Location: dashboard.php');
-        exit();
-    }
-    $orderItems = fetchOrderItems($conn, $_GET['order_id']);
-
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
-?>
+<?php include('../applicatie/controllers/orderOverviewController.php')?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -124,7 +66,7 @@ try {
         <p><strong>Delivery Address:</strong> <?= htmlspecialchars($order['address']) ?></p>
         <p><strong>Order Date:</strong> <?= htmlspecialchars(date('Y-m-d H:i', strtotime($order['datetime']))) ?></p>
         <p><strong>Status:</strong> 
-            <form method="POST" action="dashboard.php" style="display: inline;">
+            <form method="POST" onclick="event.stopPropagation();" style="display: inline;">
                 <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
                 <select name="status" onchange="this.form.submit()">
                     <option value="1" <?= $order['status'] == 1 ? 'selected' : '' ?>>Not started</option>
@@ -175,5 +117,7 @@ try {
             </tr>
         </tbody>
     </table>
+
+   
 </body>
 </html>

@@ -49,8 +49,6 @@
     <ul>
         <li>Naam en contactgegevens</li>
         <li>E-mailadres</li>
-        <li>Telefoonnummer</li>
-        <li>IP-adres</li>
         <li>Gegevens over uw activiteiten op onze website</li>
     </ul>
 
