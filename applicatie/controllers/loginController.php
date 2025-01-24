@@ -1,7 +1,7 @@
 <?php
-session_start();
 require_once('db_connectie.php');
 require_once('../applicatie/functions/security.php');
+session_start();
 error_reporting(0); 
 ini_set('display_errors', 0); 
 $error = '';
@@ -12,9 +12,9 @@ function authenticateUser($username, $password, $conn) {
     $query = "SELECT * FROM [User] WHERE username = ?";
     $stmt = $conn->prepare($query);
     $stmt->execute([$username]);
+
     
     if ($row = $stmt->fetch()) {
-        // Check hashed password
         $hashedPassword = hash('sha256', $password);
         if ($hashedPassword === $row['password']) {
             $_SESSION['username'] = $row['username'];
@@ -34,10 +34,8 @@ function redirectUser() {
 try {
     $conn = maakverbinding(); 
 
-    checkSessionTimeout();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        startSecureSession();
 
         $username = $_POST['username'];
         $password = $_POST['password'];
