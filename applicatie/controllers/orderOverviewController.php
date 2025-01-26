@@ -37,36 +37,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['s
 }
 
 
-
-function fetchOrderDetailsAndItems($conn, $orderId, $username) {
+function fetchOrderData($conn, $orderId, $username) {
     $query = "SELECT po.order_id, po.client_name, po.datetime, po.status, po.address, po.personnel_username, 
               STRING_AGG(CONCAT(pop.quantity, 'x ', pop.product_name), ', ') as order_items,
-              SUM(pop.quantity * p.price) as total_amount,
-              pop.*, p.price, (p.price * pop.quantity) as subtotal
+              SUM(pop.quantity * p.price) as total_amount
               FROM Pizza_Order po
               LEFT JOIN Pizza_Order_Product pop ON po.order_id = pop.order_id
               LEFT JOIN Product p ON pop.product_name = p.name
               WHERE po.order_id = :order_id AND po.personnel_username = :personnel_username
-              GROUP BY po.order_id, po.client_name, po.datetime, po.status, po.address, po.personnel_username, pop.product_name, pop.quantity";
-    
+              GROUP BY po.order_id, po.client_name, po.datetime, po.status, po.address, po.personnel_username";
+
     $stmt = $conn->prepare($query);
     $stmt->execute([
         'order_id' => $orderId,
         'personnel_username' => $username
     ]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $orderDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($orderDetails) {
+        $itemsQuery = "SELECT pop.*, p.price, (p.price * pop.quantity) as subtotal
+                       FROM Pizza_Order_Product pop
+                       JOIN Product p ON pop.product_name = p.name
+                       WHERE pop.order_id = :order_id";
+
+        $itemsStmt = $conn->prepare($itemsQuery);
+        $itemsStmt->execute(['order_id' => $orderId]);
+        $orderDetails['items'] = $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    return $orderDetails;
 }
 
 try {
-    $orderDetailsAndItems = fetchOrderDetailsAndItems($conn, $_GET['order_id'], $_SESSION['username']);
-    if (!$orderDetailsAndItems) {
+    $conn = maakVerbinding();
+    $order = fetchOrderData($conn, $_GET['order_id'], $_SESSION['username']);
+
+    if (!$order) {
         header('Location: dashboard.php');
         exit();
     }
-    $order = $orderDetailsAndItems[0]; 
-    $orderItems = array_slice($orderDetailsAndItems, 1); 
+    $orderItems = $order['items']; 
 
 } catch (PDOException $e) {
-    header('Location: ../error.php'); 
-    exit();
+    die("Connection failed: " . $e->getMessage());
 }
+?>

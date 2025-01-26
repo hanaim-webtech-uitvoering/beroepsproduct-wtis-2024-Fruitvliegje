@@ -15,8 +15,7 @@ function authenticateUser($username, $password, $conn) {
 
     
     if ($row = $stmt->fetch()) {
-        $hashedPassword = hash('sha256', $password);
-        if ($hashedPassword === $row['password']) {
+        if (password_verify($password, $row['password'])) {
             $_SESSION['username'] = $row['username'];
             $_SESSION['role'] = $row['role'];
             return true;

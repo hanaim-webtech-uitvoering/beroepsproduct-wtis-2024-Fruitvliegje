@@ -1,3 +1,4 @@
+
 IF OBJECT_ID('User', 'U') IS NOT NULL
     DROP TABLE [User];
 
@@ -81,19 +82,47 @@ ALTER TABLE [Pizza_Order] ADD FOREIGN KEY ([personnel_username]) REFERENCES [Use
 ALTER TABLE [Pizza_Order_Product] ADD FOREIGN KEY ([order_id]) REFERENCES [Pizza_Order] ([order_id]);
 ALTER TABLE [Pizza_Order_Product] ADD FOREIGN KEY ([product_name]) REFERENCES [Product] ([name]);
 
-
+-- -- Insert statements for 20 users with realistic names
 INSERT INTO [User] (username, [password], first_name, last_name, [role]) VALUES
-('jdoe', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'John', 'Doe', 'Client'),
-('mvermeer', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Maria', 'Vermeer', 'Client'),
-('rdeboer', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Rik', 'de Boer', 'Personnel'),
-('sbakker', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Sophie', 'Bakker', 'Personnel'),
-('fholwerda', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Fenna', 'Holwerda', 'Client'),
-('kdijkstra', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Klaas', 'Dijkstra', 'Client'),
-('lheineken', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Lucas', 'Heineken', 'Personnel'),
-('mvandam', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Mila', 'van Dam', 'Personnel'),
-('gkoolstra', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Gert', 'Koolstra', 'Client'),
-('evisscher', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Emma', 'Visscher', 'Client'),
-('tjanssen', 'ef92b778bafe5f34c3b1a5c810c9e8f29eaf71b68bc5771d345602687b37e55c', 'Tom', 'Janssen',
+('jdoe', 'wachtwoord', 'John', 'Doe', 'Client'),
+('mvermeer', 'wachtwoord', 'Maria', 'Vermeer', 'Client'),
+('rdeboer', 'wachtwoord', 'Rik', 'de Boer', 'Personnel'),
+('sbakker', 'wachtwoord', 'Sophie', 'Bakker', 'Personnel'),
+('fholwerda', 'wachtwoord', 'Fenna', 'Holwerda', 'Client'),
+('kdijkstra', 'wachtwoord', 'Klaas', 'Dijkstra', 'Client'),
+('lheineken', 'wachtwoord', 'Lucas', 'Heineken', 'Personnel'),
+('mvandam', 'wachtwoord', 'Mila', 'van Dam', 'Personnel'),
+('gkoolstra', 'wachtwoord', 'Gert', 'Koolstra', 'Client'),
+('evisscher', 'wachtwoord', 'Emma', 'Visscher', 'Client'),
+('tjanssen', 'wachtwoord', 'Tom', 'Janssen', 'Personnel'),
+('abrouwer', 'wachtwoord', 'Anna', 'Brouwer', 'Personnel'),
+('wbos', 'wachtwoord', 'Willem', 'Bos', 'Client'),
+('tvandermeer', 'wachtwoord', 'Tessa', 'van der Meer', 'Client'),
+('rkramer', 'wachtwoord', 'Rob', 'Kramer', 'Personnel'),
+('mnijland', 'wachtwoord', 'Maud', 'Nijland', 'Personnel'),
+('dschouten', 'wachtwoord', 'David', 'Schouten', 'Client'),
+('hdeleeuw', 'wachtwoord', 'Hanna', 'de Leeuw', 'Client'),
+('pvanveen', 'wachtwoord', 'Peter', 'van Veen', 'Personnel'),
+('adekhane', 'wachtwoord', 'Ahmed', 'Dekhane', 'Client'), 
+('mbouaziz', 'wachtwoord', 'Mouna', 'Bouaziz', 'Client'), 
+('tbayrak', 'wachtwoord', 'Tarik', 'Bayrak', 'Personnel'), 
+('ayildiz', 'wachtwoord', 'Aylin', 'Yildiz', 'Personnel'), 
+('rnarsingh', 'wachtwoord', 'Rajesh', 'Narsingh', 'Client'), 
+('sdurga', 'wachtwoord', 'Shanti', 'Durga', 'Client'), 
+('mkassem', 'wachtwoord', 'Mohammed', 'Kassem', 'Personnel'), 
+('lsaleh', 'wachtwoord', 'Lina', 'Saleh', 'Personnel'), 
+('aghebre', 'wachtwoord', 'Amanuel', 'Ghebre', 'Client'), 
+('mtsega', 'wachtwoord', 'Miriam', 'Tsega', 'Client'), 
+('pkowalski', 'wachtwoord', 'Piotr', 'Kowalski', 'Personnel'), 
+('aivanov', 'wachtwoord', 'Alexei', 'Ivanov', 'Personnel'), 
+('mkarimi', 'wachtwoord', 'Mina', 'Karimi', 'Client'), 
+('hradman', 'wachtwoord', 'Hassan', 'Radman', 'Client'), 
+('lbaloyi', 'wachtwoord', 'Lerato', 'Baloyi', 'Personnel'), 
+('dpetrov', 'wachtwoord', 'Dmitri', 'Petrov', 'Personnel'), 
+('ibrahimovic', 'wachtwoord', 'Ismail', 'Brahimovic', 'Client'), 
+('snovak', 'wachtwoord', 'Sanja', 'Novak', 'Client'), 
+('yabebe', 'wachtwoord', 'Yonas', 'Abebe', 'Personnel'), 
+('ngebre', 'wachtwoord', 'Nardos', 'Gebre', 'Personnel'); 
 
 -- Insert statements for product types
 INSERT INTO ProductType ([name]) VALUES
@@ -106,7 +135,7 @@ INSERT INTO ProductType ([name]) VALUES
 -- Insert statements for ingredients
 INSERT INTO Ingredient ([name]) VALUES
 ('Tomaat'),
-('Kaas'), 
+('Kaas'),
 ('Pepperoni'),
 ('Champignon'),
 ('Ui'),

@@ -28,7 +28,7 @@ function registerUser($conn, $username, $password, $firstName, $lastName, $addre
         $insertQuery = "INSERT INTO [User] (username, password, first_name, last_name, address, role) 
                         VALUES (?, ?, ?, ?, ?, 'Client')";
         $stmt = $conn->prepare($insertQuery);
-        $hashedPassword = hash('sha256', $password);
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         if ($stmt->execute([$username, $hashedPassword, $firstName, $lastName, $address])) {
             $_SESSION['success'] = "Registration successful! Please login.";
             header("Location: login.php");
